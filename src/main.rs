@@ -164,10 +164,7 @@ impl NTPMessage {
         let seconds = reader.read_u32::<BigEndian>()?;
         let fraction = reader.read_u32::<BigEndian>()?;
 
-        Ok(NTPTimestamp {
-            seconds,
-            fraction,
-        })
+        Ok(NTPTimestamp { seconds, fraction })
     }
 
     fn rx_time(&self) -> Result<NTPTimestamp, std::io::Error> {
@@ -303,6 +300,7 @@ fn main() {
         let t = parser(&t_).expect(&err_msg);
 
         Clock::set(t);
+        check_sys_error();
     } else if action == Action::Check {
         let offset = check_time().unwrap() as isize;
 
@@ -312,15 +310,7 @@ fn main() {
         let now: DateTime<Utc> = Utc::now() + adjust_ms;
 
         Clock::set(now);
-    }
-
-    let maybe_error = std::io::Error::last_os_error();
-    let os_error_code = &maybe_error.raw_os_error();
-
-    match os_error_code {
-        Some(0) => (),
-        Some(_) => panic!("Error setting time: {:?}", maybe_error),
-        None => (),
+        check_sys_error();
     }
 
     let now = Clock::get();
@@ -328,5 +318,16 @@ fn main() {
         Standard::RFC2822 => println!("{}", now.to_rfc2822()),
         Standard::RFC3339 => println!("{}", now.to_rfc3339()),
         Standard::Timestamp => println!("{}", now.timestamp()),
+    }
+}
+
+fn check_sys_error() {
+    let maybe_error = std::io::Error::last_os_error();
+    let os_error_code = &maybe_error.raw_os_error();
+
+    match os_error_code {
+        Some(0) => (),
+        Some(_) => panic!("Error setting time: {:?}", maybe_error),
+        None => (),
     }
 }
