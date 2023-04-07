@@ -13,20 +13,18 @@ Features
 Usage
 -----
 
-```vbnet
-USAGE:
-    rust_clock [FLAGS] [OPTIONS] [datetime]
+```bash
+# clock --help
+Usage: clock [OPTIONS] [ACTION] [DATETIME]
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+Arguments:
+  [ACTION]    Action to perform [default: get] [possible values: get, set, check]
+  [DATETIME]  When <action> is 'set', apply <datetime>. Otherwise, ignore.
 
-OPTIONS:
-    -a, --action <action>    Action to perform [default: get]
-    -s, --std <std>          Time standard to use [default: rfc3339]
-
-ARGS:
-    <datetime>    When <action> is 'set', apply <datetime>. Otherwise, ignore.
+Options:
+  -s, --std <STD>  Time standard to use [default: rfc3339] [possible values: rfc2822, rfc3339, timestamp]
+  -h, --help       Print help
+  -V, --version    Print version
 ```
 
 Dependencies
