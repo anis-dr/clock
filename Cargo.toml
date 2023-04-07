@@ -1,0 +1,20 @@
+[package]
+name = "clock"
+version = "0.1.0"
+edition = "2021"
+authors = ["Anis Lazaar <anis00723@gmail.com>"]
+description = "A simple clock utility"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+byteorder = "1.4.3"
+chrono = "0.4.24"
+clap = { version = "4.2.1", features = ["derive"] }
+
+[target.'cfg(not(windows))'.dependencies]
+libc = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+winapi = "0.2"
+kernel32-sys = "0.2"
